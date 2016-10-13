@@ -11,29 +11,46 @@ import Foundation
 print("Hello, World!")
 
 public func testMe() -> String {
-  return "I have been tested"
+    return "I have been tested"
 }
 
 open class TestMe {
-  open func Please() -> String {
-    return "I have been tested"
-  }
+    open func Please() -> String {
+        return "I have been tested"
+    }
 }
 
 ////////////////////////////////////
 // Money
 //
 public struct Money {
-  public var amount : Int
-  public var currency : String
-  
-  public func convert(_ to: String) -> Money {
-  }
-  
-  public func add(_ to: Money) -> Money {
-  }
-  public func subtract(_ from: Money) -> Money {
-  }
+    public var amount : Int // pennies
+    public var currency : String
+    
+    public func convert(_ to: String) -> Money {
+        let conversionRate = [
+            "usdToGBP": 0.5,
+            "usdToEUR": 1.5,
+            "usdToCAN": 1.25,
+            "canToGBP": 0.61,
+            "canToEUR": 0.6667,
+            "canToUSD": 0.8,
+            "gbpToUSD": 2.0,
+            "gbpToEUR": 1.11,
+            "gbpToCAN": 1.64,
+            "eurToGBP": 0.90,
+            "eurToUSD": 0.6667,
+            "eurToCAN": 1.48,
+            ]
+    }
+    
+    public func add(_ to: Money) -> Money {
+    
+    }
+    
+    public func subtract(_ from: Money) -> Money {
+    
+    }
 }
 
 ////////////////////////////////////
