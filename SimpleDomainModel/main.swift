@@ -23,12 +23,11 @@ open class TestMe {
 //
 public struct Money {
     public var amount : Int
-    public var currency : String
-    
-    enum Currency: String {
-        case USD, EUR, CAN, GBP
+    public var currency : Currency
+    public enum Currency : String {
+        case USD = "USD", EUR = "EUR", CAN = "CAN", GBP = "GBP"
     }
-    
+
     private let conversionRate = [
         "usdToGBP": 0.5,
         "usdToEUR": 1.5,
@@ -44,91 +43,67 @@ public struct Money {
         "eurToCAN": 1.48,
         ]
     
-    init(amount: Int, currency: String) {
-        self.currency = currency
+    public init(amount: Int, currency: Currency) {
         self.amount = amount
-
+        self.currency = currency
     }
 
     
     public func convert(_ to: String) -> Money {
-        
-//        switch value {
-//        case .GBP:
-//            switch
-//        }
-       let conversionRate = [
-            "usdToGBP": 0.5,
-            "usdToEUR": 1.5,
-            "usdToCAN": 1.25,
-            "canToGBP": 0.61,
-            "canToEUR": 0.6667,
-            "canToUSD": 0.8,
-            "gbpToUSD": 2.0,
-            "gbpToEUR": 1.11,
-            "gbpToCAN": 1.64,
-            "eurToGBP": 0.90,
-            "eurToUSD": 0.6667,
-            "eurToCAN": 1.48,
-            ]
-        
-        
-        
         switch self.currency {
-        case "GBP":
+        case .GBP:
             switch to {
             case "USD":
-                return Money(amount: Int(Double(self.amount) * conversionRate["gbpToUSD"]!), currency: "USD")
+                return Money(amount: Int(Double(self.amount) * conversionRate["gbpToUSD"]!), currency: .USD)
             case "EUR":
-                return Money(amount: Int(Double(self.amount) * conversionRate["gbpToEUR"]!), currency: "EUR")
+                return Money(amount: Int(Double(self.amount) * conversionRate["gbpToEUR"]!), currency: .EUR)
             case "CAN":
-                return Money(amount: Int(Double(self.amount) * conversionRate["gbpToCAN"]!), currency: "CAN")
+                return Money(amount: Int(Double(self.amount) * conversionRate["gbpToCAN"]!), currency: .CAN)
             default:
                 return Money(amount: self.amount, currency: self.currency)
             }
-        case "CAN":
+        case .CAN:
             switch to {
             case "USD":
-                return Money(amount: Int(Double(self.amount) * conversionRate["canToUSD"]!), currency: "USD")
+                return Money(amount: Int(Double(self.amount) * conversionRate["canToUSD"]!), currency: .USD)
             case "EUR":
-                return Money(amount: Int(Double(self.amount) * conversionRate["canToEUR"]!), currency: "EUR")
+                return Money(amount: Int(Double(self.amount) * conversionRate["canToEUR"]!), currency: .EUR)
             case "GBP":
-                return Money(amount: Int(Double(self.amount) * conversionRate["canToGBP"]!), currency: "GBP")
+                return Money(amount: Int(Double(self.amount) * conversionRate["canToGBP"]!), currency: .GBP)
             default:
                 return Money(amount: self.amount, currency: self.currency)
             }
-        case "EUR":
+        case .EUR:
             switch to {
             case "USD":
-                return Money(amount: Int(Double(self.amount) * conversionRate["eurToUSD"]!), currency: "USD")
+                return Money(amount: Int(Double(self.amount) * conversionRate["eurToUSD"]!), currency: .USD)
             case "EUR":
-                return Money(amount: Int(Double(self.amount) * conversionRate["eurToGBP"]!), currency: "GBP")
+                return Money(amount: Int(Double(self.amount) * conversionRate["eurToGBP"]!), currency: .GBP)
             case "CAN":
-                return Money(amount: Int(Double(self.amount) * conversionRate["eurToCAN"]!), currency: "CAN")
+                return Money(amount: Int(Double(self.amount) * conversionRate["eurToCAN"]!), currency: .CAN)
             default:
                 return Money(amount: self.amount, currency: self.currency)
             }
         default:
             switch to {
             case "GBP":
-                return Money(amount: Int(Double(self.amount) * conversionRate["usdToGBP"]!), currency: "GBP")
+                return Money(amount: Int(Double(self.amount) * conversionRate["usdToGBP"]!), currency: .GBP)
             case "EUR":
-                return Money(amount: Int(Double(self.amount) * conversionRate["usdToEUR"]!), currency: "EUR")
+                return Money(amount: Int(Double(self.amount) * conversionRate["usdToEUR"]!), currency: .EUR)
             case "CAN":
-                return Money(amount: Int(Double(self.amount) * conversionRate["usdToCAN"]!), currency: "CAN")
+                return Money(amount: Int(Double(self.amount) * conversionRate["usdToCAN"]!), currency: .CAN)
             default:
                 return Money(amount: self.amount, currency: self.currency)
             }
         }
     }
 
-
     public func add(_ to: Money) -> Money {
-        return Money(amount: to.amount + self.convert(to.currency).amount, currency: to.currency)
+        return Money(amount: to.amount + self.convert(to.currency.rawValue).amount, currency: to.currency)
     }
     
     public func subtract(_ from: Money) -> Money {
-        return Money(amount: from.amount + self.convert(from.currency).amount, currency: from.currency)
+        return Money(amount: from.amount + self.convert(from.currency.rawValue).amount, currency: from.currency)
     }
 }
 
@@ -221,6 +196,7 @@ open class Person {
 //
 open class Family {
     fileprivate var members : [Person] = []
+//    var members : [Person] = []
   
     public init(spouse1: Person, spouse2: Person) {
         members.append(spouse1)
@@ -234,7 +210,7 @@ open class Family {
     }
   
     open func haveChild(_ child: Person) -> Bool {
-//        child.age = 0
+        child.age = 0
         members.append(child)
         return true
     }
@@ -249,4 +225,3 @@ open class Family {
         return result
     }
 }
-
