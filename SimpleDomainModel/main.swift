@@ -133,19 +133,6 @@ public struct Money {
 }
 
 
-let tenUSD = Money(amount: 10, currency: "USD")
-let twelveUSD = Money(amount: 12, currency: "USD")
-let fiveGBP = Money(amount: 5, currency: "GBP")
-let fifteenEUR = Money(amount: 15, currency: "EUR")
-let fifteenCAN = Money(amount: 15, currency: "CAN")
-
-let gbp = tenUSD.convert("GBP")
-print("tenUSD: \(tenUSD.amount)")
-print("gbp: \(gbp.amount)")
-print(gbp.currency == "GBP")
-print(gbp.amount == 5)
-
-
 ////////////////////////////////////
 // Job
 //
@@ -178,9 +165,9 @@ open class Job {
     open func raise(_ amt : Double) {
         switch self.type {
         case .Hourly(let hourly):
-            self.type = Job.JobType.Hourly(hourly + amt)
+            self.type = .Hourly(hourly + amt)
         case .Salary(let salary):
-            self.type = Job.JobType.Salary(salary + Int(amt))
+            self.type = .Salary(salary + Int(amt))
         }
     }
 }
@@ -236,22 +223,30 @@ open class Family {
     fileprivate var members : [Person] = []
   
     public init(spouse1: Person, spouse2: Person) {
-        spouse1.spouse = spouse2
-        spouse2.spouse = spouse1
         members.append(spouse1)
         members.append(spouse2)
+        
+        // test for validity before proceding
+        assert(spouse1._spouse == nil)
+        assert(spouse2._spouse == nil)
+        spouse1.spouse = spouse2
+        spouse2.spouse = spouse1
     }
   
     open func haveChild(_ child: Person) -> Bool {
-        child.age = 0
+//        child.age = 0
         members.append(child)
         return true
     }
     
     open func householdIncome() -> Int {
-        let result: Int = 0
+        var result: Int = 0
+        for member in self.members {
+            if member.job != nil {
+                result = result + (member.job?.calculateIncome(2000))!
+            }
+        }
         return result
     }
 }
-
 
